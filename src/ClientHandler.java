@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -18,7 +15,7 @@ public class ClientHandler implements Runnable {
         try {
             this.socket = socket;
             this.bufferedReader = new BufferedReader (new InputStreamReader(socket.getInputStream()));
-            this.bufferedWriter = new BufferedWriter( new InputStreamReader( socket.getOutputStream() ) );
+            this.bufferedWriter = new BufferedWriter( new OutputStreamWriter( socket.getOutputStream() ) );
             this.clientUsername = bufferedReader.readLine();
             clientHandlers.add(this);
             broadcastMessage("SERVER: "+ clientUsername + " has entered the chat!");
@@ -52,6 +49,26 @@ public class ClientHandler implements Runnable {
             }catch (IOException e){
                 closeEverything(socket, bufferedWriter, bufferedReader);
             }
+        }
+    }
+    public void removeClientHandler(){
+        clientHandlers.remove(this);
+        broadcastMessage("<Server> "+ this.clientUsername + " has left the chat.");
+    }
+    public void closeEverything(Socket socket, BufferedWriter bufferedWriter, BufferedReader bufferedReader){
+        removeClientHandler();
+        try {
+            if (bufferedReader != null){
+                bufferedReader.close();
+            }
+            if (bufferedWriter != null){
+                bufferedWriter.close();
+            }
+            if (socket != null){
+                socket.close();
+            }
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 
