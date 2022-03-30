@@ -16,6 +16,7 @@ public class Client {
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.username = username;
         }catch (IOException e){
+            System.out.println("1 close error");
             closeEverything(socket, bufferedWriter, bufferedReader);
         }
     }
@@ -32,6 +33,7 @@ public class Client {
                 bufferedWriter.flush();
             }
         }catch (IOException e){
+            System.out.println("2 close error");
             closeEverything(socket, bufferedWriter, bufferedReader);
         }
     }
@@ -46,6 +48,7 @@ public class Client {
                         msgFromGroupChat = bufferedReader.readLine();
                         System.out.println(msgFromGroupChat);
                     }catch (IOException e){
+                        System.out.println("3 close error");
                         closeEverything(socket, bufferedWriter, bufferedReader);
                     }
                 }
@@ -65,6 +68,7 @@ public class Client {
                 socket.close();
             }
         }catch (IOException e){
+            System.out.println("client close error");
             e.printStackTrace();
         }
     }

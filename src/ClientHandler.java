@@ -32,6 +32,7 @@ public class ClientHandler implements Runnable {
                 messageFromClient = bufferedReader.readLine();
                 broadcastMessage(messageFromClient);
             }catch (IOException e){
+                System.out.println("run close error");
                 closeEverything(socket, bufferedWriter, bufferedReader);
                 break;
             }
@@ -41,19 +42,20 @@ public class ClientHandler implements Runnable {
     public void broadcastMessage(String messageToSend){
         for (ClientHandler clientHandler : clientHandlers){
             try {
-                if (!clientHandler.clientUsername.equals(this.clientUsername)){
+                if (!clientHandler.clientUsername.equals(clientUsername)){
                     clientHandler.bufferedWriter.write(messageToSend);
                     clientHandler.bufferedWriter.newLine();
                     clientHandler.bufferedWriter.flush();
                 }
             }catch (IOException e){
+                System.out.println("4 close error");
                 closeEverything(socket, bufferedWriter, bufferedReader);
             }
         }
     }
     public void removeClientHandler(){
         clientHandlers.remove(this);
-        broadcastMessage("<Server> "+ this.clientUsername + " has left the chat.");
+        broadcastMessage("<Server> "+ clientUsername + " has left the chat.");
     }
     public void closeEverything(Socket socket, BufferedWriter bufferedWriter, BufferedReader bufferedReader){
         removeClientHandler();
@@ -68,6 +70,7 @@ public class ClientHandler implements Runnable {
                 socket.close();
             }
         }catch (IOException e){
+            System.out.println("5 close error");
             e.printStackTrace();
         }
     }

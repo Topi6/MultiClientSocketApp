@@ -22,6 +22,7 @@ public class Server {
                 thread.start();
             }
         } catch (IOException e) {
+            System.out.println("5 close error");
         }
     }
 
@@ -29,6 +30,7 @@ public class Server {
         try {
             if (serverSocket != null) serverSocket.close();
         }catch (IOException e){
+            System.out.println("6 close error");
             e.printStackTrace();
         }
     }
